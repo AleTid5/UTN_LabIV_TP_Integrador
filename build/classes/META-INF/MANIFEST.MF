@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Main-Class: sun.rmi.server.Activation
+Class-Path: javax.annotation.jar javax.jms.jar javax.ejb.jar javax.persi
+ stence.jar javax.transaction.jar javax.resource.jar javax.servlet.jar j
+ avax.servlet.jsp.jar javax.servlet.jsp.jstl.jar
+
