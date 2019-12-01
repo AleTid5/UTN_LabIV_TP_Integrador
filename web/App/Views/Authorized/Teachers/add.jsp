@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layout" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <layout:authorized>
     <jsp:body>
@@ -50,7 +51,12 @@
                                 <div class="col-sm-10">
                                     <div class="form-group">
                                         <select required name="location" class="selectpicker" data-style="select-with-transition">
-                                                ${ optionLocations }
+                                            <c:forEach var="location" items="${ locations }">
+                                                <option value="${ location.getId() }"
+                                                    ${! location.getStatus().equals("A") ? "disabled": ""}>
+                                                        ${ location.getName() }
+                                                </option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                 </div>
@@ -60,7 +66,12 @@
                                 <div class="col-sm-10">
                                     <div class="form-group">
                                         <select required name="province" class="selectpicker" data-style="select-with-transition">
-                                                ${ optionProvinces }
+                                            <c:forEach var="province" items="${ provinces }">
+                                                <option value="${ province.getId() }"
+                                                        ${! province.getStatus().equals("A") ? "disabled": ""}>
+                                                        ${ province.getName() }
+                                                </option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                 </div>
@@ -82,10 +93,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer ">
-                            <div class="row">
-                                <div class="col-md-offset-11 col-md-1">
-                                    <button type="submit"  class="btn btn-fill btn-rose">Agregar</button>
+                        <div class="card-footer" style="margin: 0 0px 10px;">
+                            <div class="row" style="width: 100%">
+                                <div class="col-2" style="padding-left: 30px;">
+                                    <a href="../teachers" class="btn btn-fill btn-dark">Cancelar</a>
+                                </div>
+                                <div class="offset-6 col-2 offset-sm-8 col-sm-2" style="padding-right: 5px;">
+                                    <button type="submit" class="btn btn-fill btn-rose" style="float: right;">Finalizar</button>
                                 </div>
                             </div>
                         </div>

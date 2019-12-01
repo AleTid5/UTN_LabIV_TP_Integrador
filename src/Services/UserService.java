@@ -1,11 +1,14 @@
 package Services;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import Exceptions.CredentialsException;
+import Exceptions.UnauthorizedException;
 import Models.Location;
 import Models.Province;
 import Models.User;
@@ -14,36 +17,26 @@ import Models.UserType;
 public class UserService extends Service {
     private static final String table = "users";
 
-    public static final Boolean login(String email, String password) {
-        Boolean isValid = false;
+    public static final void login(String email, String password) throws CredentialsException, SQLException {
+        if (email == "" || password == "") throw new CredentialsException();
 
-        try {
-            if (email == "" || password == "") return false;
-
-            String query = "SELECT COUNT(*) AS isValid FROM %s.%s WHERE email = %s AND password = %s AND status = 'A'";
-            query = String.format(query, database, table, toDBString(email), toDBMD5(password));
-            ResultSet rs = execSelect(query);
-            rs.next();
-            isValid = rs.getBoolean("isValid");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return isValid;
+        String query = "SELECT COUNT(*) AS isValid FROM %s.%s WHERE email = %s AND password = %s AND status = 'A'";
+        query = String.format(query, database, table, toDBString(email), toDBMD5(password));
+        ResultSet rs = execSelect(query);
+        rs.next();
+        if (! rs.getBoolean("isValid")) throw new CredentialsException();
     }
 
     public static final void authenticate(HttpServletRequest req, String email) {
         try {
-            SessionService.create(req);
-
             String query = "SELECT userTypeId, name, lastname FROM %s.%s WHERE email = %s";
             query = String.format(query, database, table, toDBString(email));
             ResultSet rs = execSelect(query);
             rs.next();
-            SessionService.addParameter("email", email);
-            SessionService.addParameter("userTypeId", rs.getInt("userTypeId"));
-            SessionService.addParameter("name", rs.getString("name"));
-            SessionService.addParameter("lastname", rs.getString("lastname"));
+            req.getSession().setAttribute("email", email);
+            req.getSession().setAttribute("userTypeId", rs.getInt("userTypeId"));
+            req.getSession().setAttribute("name", rs.getString("name"));
+            req.getSession().setAttribute("lastname", rs.getString("lastname"));
         } catch (Exception e) {
             e.printStackTrace();
         }

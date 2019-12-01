@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class GeoLocationService extends Service {
-    public static final ArrayList<Province> getProvinces() {
+    public static ArrayList<Province> getProvinces() {
         ArrayList<Province> provinces = new ArrayList<>();
 
         try {
@@ -24,7 +24,7 @@ public class GeoLocationService extends Service {
         return provinces;
     }
 
-    public static final ArrayList<Location> getLocations() {
+    public static ArrayList<Location> getLocations() {
         ArrayList<Location> locations = new ArrayList<>();
 
         try {

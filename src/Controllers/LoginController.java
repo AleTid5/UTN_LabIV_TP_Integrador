@@ -15,7 +15,7 @@ public class LoginController extends Controller {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			this.revokeSession();
+			this.revokeSession(req);
 			this.setContext(req, "");
 			req.getRequestDispatcher("/App/Views/Unauthorized/Login/index.jsp").forward(req, resp);
 		} catch (Exception e) {
@@ -26,17 +26,13 @@ public class LoginController extends Controller {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			String email = (String) req.getParameter("email");
-			String password = (String) req.getParameter("password");
-
-			if (UserService.login(email, password)) {
-				UserService.authenticate(req, email);
-				redirect(req, resp, "dashboard");
-			} else {
-				redirect(req, resp, "login");
-			}
-
+			String email = req.getParameter("email");
+			String password = req.getParameter("password");
+			UserService.login(email, password);
+			UserService.authenticate(req, email);
+			redirect(req, resp, "dashboard");
 		} catch (Exception e) {
+			redirect(req, resp, "login");
 			e.printStackTrace();
 		}
 	}

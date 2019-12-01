@@ -8,32 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Exceptions.UnauthorizedException;
-import Services.SessionService;
+import Interfaces.iController;
 import Utils.Message;
 
 @SuppressWarnings("serial")
-public abstract class Controller extends HttpServlet {
-	private static final String mainPath = "/Alejandro_Tidele_TP_Integrador";
-	private static final String assetsPath = Controller.mainPath + "/App/Assets";
-	private static final String authorizedPath = "/App/Views/Authorized/";
-	private static final String unuthorizedPath = "/App/Views/Unauthorized/";
-	private Boolean isAuthorized = true;
-	protected ArrayList<Message> messages = null;
+public abstract class Controller extends HttpServlet implements iController {
+    private Boolean isAuthorized = true;
+    protected ArrayList<Message> messages = null;
 
-	private final void addSessionAttributes(HttpServletRequest req) {
-		req.setAttribute("email", SessionService.getParameter("email"));
-		req.setAttribute("name", SessionService.getParameter("name"));
-		req.setAttribute("lastname", SessionService.getParameter("lastname"));
-		req.setAttribute("userTypeId", SessionService.getParameter("userTypeId"));
+	protected final void setPaths(HttpServletRequest req, String navbarTitle) {
+		req.setAttribute("assetsPath", Controller.assetsPath);
+		req.setAttribute("mainPath", Controller.mainPath);
+		req.setAttribute("navbarTitle", navbarTitle);
 	}
 	
 	protected final void setContext(HttpServletRequest req, String navbarTitle) {
 		this.messages = new ArrayList<>();
-		req.setAttribute("assetsPath", Controller.assetsPath);
-		req.setAttribute("mainPath", Controller.mainPath);
-		req.setAttribute("navbarTitle", navbarTitle);
-
-		if (isAuthorized) this.addSessionAttributes(req);
+		this.setPaths(req, navbarTitle);
 	}
 
 	protected final void redirect(HttpServletRequest req, HttpServletResponse resp, String location) {
@@ -42,21 +33,17 @@ public abstract class Controller extends HttpServlet {
 		resp.setStatus(302);
 	}
 
-	protected final void revokeSession() throws IllegalStateException {
+	protected final void revokeSession(HttpServletRequest req) throws IllegalStateException {
 		this.isAuthorized = false;
-		SessionService.clean();
+		req.getSession().invalidate();
 	}
 
 	protected final String getDispatch(String path, String action) {
-		return (isAuthorized ? authorizedPath : unuthorizedPath) + path + "/" + action + ".jsp";
+		return (isAuthorized ? authorizedPath : unauthorizedPath) + path + "/" + action + ".jsp";
 	}
 
-	protected final Boolean isAdministrator() {
-		return (Integer) SessionService.getParameter("userTypeId") == 1;
-	}
-
-	protected final void mustBeAdministrator() throws UnauthorizedException {
-		if (! this.isAdministrator()) throw new UnauthorizedException();
+	protected final void mustBeAdministrator(Integer userTypeId) throws UnauthorizedException {
+		if (! userTypeId.equals(1)) throw new UnauthorizedException();
 	}
 	
 	protected final Boolean compare(String v1, String v2) {
@@ -71,14 +58,13 @@ public abstract class Controller extends HttpServlet {
 		return comparison;
 	}
 
-	protected final String getParameter(HttpServletRequest req, String key) {
-		try {
-			String parameter = (String) req.getParameter(key); 
-			byte[] bytes = parameter.getBytes(StandardCharsets.ISO_8859_1);
-			
-			return new String(bytes, StandardCharsets.UTF_8);
-		} catch (Exception e) {
-			return (String) req.getParameter(key);
-		}
+	protected final String getCleanPath(HttpServletRequest req, String index) {
+		String dirtyURL = req.getRequestURL().toString();
+		int start = dirtyURL.lastIndexOf(mainPath) + mainPath.length();
+		String cleanPath = req.getRequestURL().substring(start);
+		req.setAttribute("currentLink", cleanPath);
+		cleanPath = cleanPath.substring(cleanPath.lastIndexOf("/") + 1);
+
+		return cleanPath.equals(index) ? "index" : cleanPath;
 	}
 }

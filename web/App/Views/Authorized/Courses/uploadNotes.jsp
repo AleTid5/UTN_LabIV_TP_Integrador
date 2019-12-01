@@ -133,9 +133,9 @@
                       </table>
                     </div>
                   </div>
-                  <div class="card-footer ">
+                  <div class="card-footer" style="margin: 0 0px 10px;">
                   <div class="row">
-                    <div class="col-md-offset-11 col-md-1">
+                    <div class="offset-8 offset-sm-10 col-sm-2">
                       <button type="submit" class="btn btn-fill btn-rose">Guardar</button>
                     </div>
                   </div>

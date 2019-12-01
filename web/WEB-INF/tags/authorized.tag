@@ -1,12 +1,12 @@
-<%@tag import="Services.SessionService"%>
 <%@tag description="Authorized Layout" pageEncoding="UTF-8"%>
 <%@attribute name="head" fragment="true"%>
 <%@attribute name="scripts" fragment="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <% try {
-	SessionService.getParameter("name");
-	if (request.getDispatcherType().toString().equals("REQUEST")) throw new Exception();
+	if (request.getDispatcherType().toString().equals("REQUEST") ||
+			request.getSession().getAttribute("email").equals(null))
+		throw new Exception();
 } catch (Exception e) {
 	response.setHeader("Location", request.getContextPath() + "/login");
 	response.setHeader("Cache-Control", "no-cache");
@@ -35,8 +35,8 @@
 				<i class="material-icons">close</i>
 			</button>
 			<span>
-						<b>${ message.getTitle() }</b><br>
-						${ message.getBody() }
+					<b>${ message.getTitle() }</b><br>
+					${ message.getBody() }
 			</span>
 		</div>
 	</c:forEach>

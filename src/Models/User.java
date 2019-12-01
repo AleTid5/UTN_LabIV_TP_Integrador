@@ -58,7 +58,7 @@ public class User extends Model {
 		String borndate = this.borndate;
 
 		try {
-			SimpleDateFormat viewFormat = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat viewFormat = new SimpleDateFormat("MM/dd/yyyy");
 			SimpleDateFormat databaseFormat = new SimpleDateFormat("yyyy-MM-dd");
 			borndate = toView ? viewFormat.format(databaseFormat.parse(borndate)) : databaseFormat.format(viewFormat.parse(borndate));
 		} catch (ParseException e) {
@@ -69,7 +69,7 @@ public class User extends Model {
 	}
 	public void setBorndate(String borndate) {
 		try {
-			SimpleDateFormat viewFormat = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat viewFormat = new SimpleDateFormat("MM/dd/yyyy");
 			SimpleDateFormat databaseFormat = new SimpleDateFormat("yyyy-MM-dd");
 			this.borndate = databaseFormat.format(viewFormat.parse(borndate));
 		} catch (ParseException e) {

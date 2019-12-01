@@ -14,9 +14,10 @@ public class DashboardController extends Controller {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+			String action = getCleanPath(req, path.toLowerCase());
 			this.setContext(req, "Dashboard");
 
-			req.getRequestDispatcher(getDispatch(path, "index")).forward(req, resp);
+			req.getRequestDispatcher(getDispatch(path, action)).forward(req, resp);
 		} catch (NullPointerException e) {
 			redirect(req, resp, "login");
 		} catch (Exception e) {

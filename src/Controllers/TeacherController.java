@@ -8,13 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Exceptions.UnauthorizedException;
-import Models.Location;
-import Models.Province;
+import Mappers.UserMapper;
 import Models.Teacher;
-import Models.User;
 import Services.UserService;
 import Utils.Errors;
 import Utils.Helper;
+import Utils.Message;
 
 @SuppressWarnings("serial")
 @WebServlet("/teachers/*")
@@ -22,33 +21,36 @@ public class TeacherController extends Controller {
 	private static final String path = "Teachers";
 
 	private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String action = req.getRequestURL().indexOf("/add") != -1 ? "add" :
-				req.getRequestURL().indexOf("/edit") != -1 ? "edit" : "index";
+		String action = getCleanPath(req, path.toLowerCase());
 
 		String docket = req.getParameter("user-docket");
+		String error = Errors.getError(req.getParameter("errorId"));
+		if (error != null) messages.add(new Message(true, error));
 
 		if (action.equals("add")) {
 			Helper.addLocationsAndProvinces(req);
-			if (docket != null) req.setAttribute("docket", Helper.setFlashMessage("El legajo del profesor creado es " + docket, false));
+
+			if (docket != null)
+				messages.add(new Message(false, "El legajo del profesor creado es " + docket));
 		}
-		
+
 		if (action.equals("edit")) {
-			User user = Helper.setUserData(req, 2);
-			Helper.addLocationsAndProvinces(req, user.getLocation().getId(), user.getProvince().getId());
-			if (docket != null) req.setAttribute("docket", Helper.setFlashMessage("Se ha editado exitosamente al profesor con legajo " + docket, false));
-		};
-		
-		if (action.equals("index")) Helper.setUserList(req, 2);
+			Helper.setUser(req, 2);
+			Helper.addLocationsAndProvinces(req);
+			if (docket != null)
+				messages.add(new Message(false, "Se ha editado exitosamente al profesor con legajo " + docket));
+		}
 
-		req.setAttribute("error", Helper.setFlashMessage(Errors.getError(req.getParameter("error")), true));
+		if (action.equals("index")) req.setAttribute("users", UserService.list(2));
 
+		req.setAttribute("messages", messages);
 		req.getRequestDispatcher(getDispatch(path, action)).forward(req, resp);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			this.mustBeAdministrator();
+			this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
 			this.setContext(req, "Profesores");
 			this.processRequest(req, resp);
 		} catch (NullPointerException | UnauthorizedException e) {
@@ -61,30 +63,38 @@ public class TeacherController extends Controller {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			this.mustBeAdministrator();
-			Teacher teacher = new Teacher();
-			teacher.setName(getParameter(req, "name"));
-			teacher.setLastname(getParameter(req, "lastname"));
-			teacher.setBorndate(req.getParameter("borndate"));
-			teacher.setAddress(getParameter(req, "address"));
-			teacher.setLocation(new Location(Integer.parseInt(req.getParameter("location"))));
-			teacher.setProvince(new Province(Integer.parseInt(req.getParameter("province"))));
-			teacher.setEmail(getParameter(req, "email"));
-			teacher.setPhoneNumber(getParameter(req, "phoneNumber"));
-
-			Boolean isEditing = this.compare(req.getParameter("method"), "PUT");
-			String uri;
-
-			if (isEditing) {
-				teacher.setDocket(Integer.parseInt(req.getParameter("docket")));
-				UserService.edit(teacher);
-				uri = "edit?" + (teacher.getErrorKey() != null ? "errorId=" + teacher.getErrorKey() : "user-docket=" + teacher.getDocket()) +
-						"&docket=" + teacher.getDocket();
-			} else {
-				UserService.add(teacher);
-				uri = "add?" + (teacher.getErrorKey() != null ? "errorId=" + teacher.getErrorKey() :
-						"user-docket=" + teacher.getDocket());
+			if (this.compare(req.getParameter("method"), "PUT")) {
+				doPut(req, resp);
+				return;
 			}
+
+			this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
+
+			Teacher teacher = (Teacher) new UserMapper(req, new Teacher()).getUser();
+
+			UserService.add(teacher);
+			String uri = "add?" + (teacher.getErrorKey() != null ? "errorId=" + teacher.getErrorKey() :
+					"user-docket=" + teacher.getDocket());
+
+			redirect(req, resp, "teachers/" + uri);
+		} catch (NullPointerException | UnauthorizedException e) {
+			redirect(req, resp, "login");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
+			Teacher teacher = (Teacher) new UserMapper(req, new Teacher()).getUser();
+
+			teacher.setDocket(Integer.parseInt(req.getParameter("docket")));
+
+			UserService.edit(teacher);
+			String uri = "edit?" + (teacher.getErrorKey() != null ? "errorId=" + teacher.getErrorKey() : "user-docket=" + teacher.getDocket()) +
+					"&docket=" + teacher.getDocket();
 
 			redirect(req, resp, "teachers/" + uri);
 		} catch (NullPointerException | UnauthorizedException e) {
