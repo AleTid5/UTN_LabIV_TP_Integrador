@@ -120,3 +120,6 @@
         </form>
     </jsp:body>
 </layout:authorized>
+<script>
+    md.initFormExtendedDatetimepickers();
+</script>

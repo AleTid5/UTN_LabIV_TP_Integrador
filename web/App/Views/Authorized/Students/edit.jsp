@@ -62,7 +62,7 @@
                                         <select required name="location" class="selectpicker" data-style="select-with-transition">
                                             <c:forEach var="location" items="${ locations }">
                                                 <option value="${ location.getId() }"
-                                                    ${ location.getId().toString().equals(locationId) ? "selected" : "" }
+                                                    ${ location.getId().equals(user.getLocation().getId()) ? "selected" : "" }
                                                     ${! location.getStatus().equals("A") ? "disabled": ""}>
                                                         ${ location.getName() }
                                                 </option>
@@ -78,7 +78,7 @@
                                         <select required name="province" class="selectpicker" data-style="select-with-transition">
                                             <c:forEach var="province" items="${ provinces }">
                                                 <option value="${ province.getId() }"
-                                                    ${ province.getId().toString().equals(provinceId) ? "selected" : "" }
+                                                    ${ province.getId().equals(user.getProvince().getId()) ? "selected" : "" }
                                                     ${! province.getStatus().equals("A") ? "disabled": ""}>
                                                         ${ province.getName() }
                                                 </option>
@@ -110,7 +110,7 @@
                                     <a href="../students" class="btn btn-fill btn-dark">Cancelar</a>
                                 </div>
                                 <div class="offset-6 col-2 offset-sm-8 col-sm-2" style="padding-right: 5px;">
-                                    <button type="submit" class="btn btn-fill btn-rose" style="float: right;">Finalizar</button>
+                                    <button type="submite" class="btn btn-fill btn-rose" style="float: right;">Finalizar</button>
                                 </div>
                             </div>
                         </div>
@@ -121,3 +121,6 @@
         </form>
     </jsp:body>
 </layout:authorized>
+<script>
+    md.initFormExtendedDatetimepickers();
+</script>

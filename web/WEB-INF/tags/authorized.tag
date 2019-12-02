@@ -65,25 +65,5 @@
 <script src="${ assetsPath }/js/plugins/bootstrap-notify.js"></script>
 <script src="${ assetsPath }/js/app.min.js"></script>
 <script src="${ assetsPath }/js/components/sidebar.js"></script>
-<script src="${ assetsPath }/js/plugins/chartist.min.js"></script>
-<script src="${ assetsPath }/js/plugins/jquery.dataTables.min.js"></script>
-
-<script>
-	$(document).ready(function() {
-		$('#datatables').DataTable({
-			"pagingType": "full_numbers",
-			"lengthMenu": [
-				[10, 25, 50, -1],
-				[10, 25, 50, "All"]
-			],
-			responsive: true,
-			language: {
-				search: "_INPUT_",
-				searchPlaceholder: "Buscar",
-			}
-		});
-		md.initFormExtendedDatetimepickers();
-	});
-</script>
 </body>
 </html>

@@ -7,7 +7,7 @@ import Models.User;
 import javax.servlet.http.HttpServletRequest;
 
 public class UserMapper extends Mapper {
-    private User user = null;
+    private User user;
 
     public UserMapper(HttpServletRequest req, Object type) {
         this.user = (User) type;

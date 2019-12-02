@@ -73,3 +73,5 @@
     </div>
   </jsp:body>
 </layout:authorized>
+<script src="${ assetsPath }/js/plugins/jquery.dataTables.min.js"></script>
+<script src="${ assetsPath }/js/components/datatable.js"></script>

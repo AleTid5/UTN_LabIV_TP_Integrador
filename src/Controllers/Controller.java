@@ -2,6 +2,7 @@ package Controllers;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Exceptions.UnauthorizedException;
 import Interfaces.iController;
+import Services.UserService;
 import Utils.Message;
 
 @SuppressWarnings("serial")
@@ -66,5 +68,15 @@ public abstract class Controller extends HttpServlet implements iController {
 		cleanPath = cleanPath.substring(cleanPath.lastIndexOf("/") + 1);
 
 		return cleanPath.equals(index) ? "index" : cleanPath;
+	}
+
+	protected final void handledCall(HttpServletRequest req, HttpServletResponse resp, Callable func) {
+		try {
+			func.call();
+		}  catch (NullPointerException | UnauthorizedException e) {
+			redirect(req, resp, "login");
+		} catch (Exception e) {
+			resp.setStatus(402); // Unprocessable entity
+		}
 	}
 }

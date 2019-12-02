@@ -59,3 +59,4 @@
 
     </jsp:body>
 </layout:authorized>
+<script src="${ assetsPath }/js/plugins/chartist.min.js"></script>

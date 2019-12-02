@@ -29,7 +29,7 @@
 				</a>
 			</li>
 			<c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 1}">
-				<li class="nav-item">
+				<li class="nav-item ${ currentLink.contains("/students") ? "active" : ""}">
 					<a class="nav-link" data-toggle="collapse" href="#students"> <i class="material-icons">accessibility_new</i>
 						<p>
 							Ver Alumnos <b class="caret"></b>
@@ -50,7 +50,7 @@
 						</ul>
 					</div>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item ${ currentLink.contains("/teachers") ? "active" : ""}">
 					<a class="nav-link" data-toggle="collapse" href="#teachers"> <i class="material-icons">person</i>
 						<p>Ver Profesores <b class="caret"></b></p>
 					</a>
@@ -69,7 +69,7 @@
 						</ul>
 					</div>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item ${ currentLink.contains("/courses") ? "active" : ""}">
 					<a class="nav-link" data-toggle="collapse" href="#courses"> <i class="material-icons">school</i>
 						<p>
 							Ver Cursos <b class="caret"></b>
@@ -92,11 +92,11 @@
 				</li>
 			</c:if>
 			<c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 2}">
-			<li class="nav-item ${ currentLink.equals("/courses") ? "active" : ""}">
-				<a class="nav-link" href="${ mainPath }/courses"> <i class="material-icons">school</i>
-					<p>Ver Cursos</p>
-				</a>
-			</li>
+				<li class="nav-item ${ currentLink.equals("/courses") ? "active" : ""}">
+					<a class="nav-link" href="${ mainPath }/courses"> <i class="material-icons">school</i>
+						<p>Ver Cursos</p>
+					</a>
+				</li>
 			</c:if>
 		</ul>
 	</div>

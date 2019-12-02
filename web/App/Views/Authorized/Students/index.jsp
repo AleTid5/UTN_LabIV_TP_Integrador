@@ -58,9 +58,9 @@
                       <a href="students/edit?docket=${ user.getDocket() }" class="btn btn-link btn-warning btn-just-icon edit">
                         <i class="material-icons">dvr</i>
                       </a>
-                      <a href="students/remove?docket=${ user.getDocket() }" class="btn btn-link btn-danger btn-just-icon remove">
+                      <button onclick="onRemove(${ user.getDocket() })" class="btn btn-link btn-danger btn-just-icon remove">
                         <i class="material-icons">close</i>
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 </c:forEach>
@@ -73,3 +73,19 @@
     </div>
   </jsp:body>
 </layout:authorized>
+<script src="${ assetsPath }/js/plugins/jquery.dataTables.min.js"></script>
+<script src="${ assetsPath }/js/components/datatable.js"></script>
+<script>
+  onRemove = docket => {
+    $.ajax({
+      url: 'students/remove?docket=' + docket,
+      type: 'DELETE',
+      data: {
+        docket: docket
+      },
+      success: function (data) {
+        console.log(data);
+      }
+    });
+  };
+</script>

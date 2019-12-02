@@ -80,7 +80,15 @@ public class UserService extends Service {
         }
     }
 
-    public static final void remove(Integer docket) {
+    public static final void remove(Integer docket, Integer userTypeId) {
+        try {
+            String query = "UPDATE %s.%s SET status = 'B' WHERE docket = %d AND userTypeId = %d";
+            query = String.format(query, database, table, docket, userTypeId);
+
+            Service.execUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static final ArrayList<User> list(Integer userTypeId) {
