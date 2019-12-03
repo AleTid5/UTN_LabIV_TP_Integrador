@@ -45,7 +45,7 @@
                 </tfoot>
                 <tbody>
                 <c:forEach var="user" items="${ users }">
-                  <tr>
+                  <tr id="user-${ user.getDocket() }">
                     <td>${ user.getDocket() }</td>
                     <td>${ user.getName() }, ${ user.getLastname() }</td>
                     <td>${ user.getBorndate(true) }</td>
@@ -77,15 +77,49 @@
 <script src="${ assetsPath }/js/components/datatable.js"></script>
 <script>
   onRemove = docket => {
-    $.ajax({
-      url: 'students/remove?docket=' + docket,
-      type: 'DELETE',
-      data: {
-        docket: docket
-      },
-      success: function (data) {
-        console.log(data);
+    Swal.fire({
+      title: '¿Está seguro de eliminar al alumno?',
+      text: "No podrá revertir la acción",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#52af50',
+      cancelButtonColor: '#ea4a64',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: '¡Si, elimínalo!'
+    }).then((result) => {
+      if (result.value) {
+        $.ajax({
+          url: 'students/remove?docket=' + docket,
+          type: 'DELETE',
+          data: {
+            docket: docket
+          },
+          success: function (data) {
+            if (! data) return handleError();
+            if (data.status === 200) return handleSuccess(docket);
+          }
+        });
       }
     });
+  };
+
+  handleSuccess = docket => {
+    $('#datatables').DataTable().rows('#user-' + docket).remove().draw();
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Eliminado!',
+      text: 'El alumno ha sido eliminado.',
+      confirmButtonColor: '#52af50',
+    })
+  };
+
+  handleError = () => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Algo ha salido mal!',
+      confirmButtonColor: '#52af50',
+    })
   };
 </script>

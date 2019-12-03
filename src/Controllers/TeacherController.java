@@ -18,9 +18,8 @@ public class TeacherController extends UserController {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-		this.setContext();
-
 		handledCall(req, resp, () -> {
+			this.setContext();
 			this.get(req, resp);
 			return null;
 		});
@@ -33,9 +32,8 @@ public class TeacherController extends UserController {
 			return;
 		}
 
-		this.setContext();
-
 		handledCall(req, resp, () -> {
+			this.setContext();
 			this.post(req, resp);
 			return null;
 		});
@@ -43,9 +41,8 @@ public class TeacherController extends UserController {
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
-		this.setContext();
-
 		handledCall(req, resp, () -> {
+			this.setContext();
 			this.put(req, resp);
 			return null;
 		});
@@ -53,10 +50,11 @@ public class TeacherController extends UserController {
 
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
-		this.setContext();
-
 		handledCall(req, resp, () -> {
+			this.setContext();
 			this.delete(req, resp);
+			resp.setContentType("application/json");
+			resp.getWriter().print("{\"status\": 200}");
 			return null;
 		});
 	}

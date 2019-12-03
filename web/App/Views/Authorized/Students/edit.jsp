@@ -110,7 +110,7 @@
                                     <a href="../students" class="btn btn-fill btn-dark">Cancelar</a>
                                 </div>
                                 <div class="offset-6 col-2 offset-sm-8 col-sm-2" style="padding-right: 5px;">
-                                    <button type="submite" class="btn btn-fill btn-rose" style="float: right;">Finalizar</button>
+                                    <button type="submit" class="btn btn-fill btn-rose" style="float: right;">Finalizar</button>
                                 </div>
                             </div>
                         </div>

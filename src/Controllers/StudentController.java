@@ -53,6 +53,8 @@ public class StudentController extends UserController {
 		handledCall(req, resp, () -> {
 			this.setContext();
 			this.delete(req, resp);
+			resp.setContentType("application/json");
+			resp.getWriter().print("{\"status\": 200}");
 			return null;
 		});
 	}

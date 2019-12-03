@@ -45,7 +45,7 @@
                 </tfoot>
                 <tbody>
                 <c:forEach var="user" items="${ users }">
-                  <tr>
+                  <tr id="user-${ user.getDocket() }">
                     <td>${ user.getDocket() }</td>
                     <td>${ user.getName() }, ${ user.getLastname() }</td>
                     <td>${ user.getBorndate(true) }</td>
@@ -58,9 +58,9 @@
                       <a href="teachers/edit?docket=${ user.getDocket() }" class="btn btn-link btn-warning btn-just-icon edit">
                         <i class="material-icons">dvr</i>
                       </a>
-                      <a href="teachers/remove?docket=${ user.getDocket() }" class="btn btn-link btn-danger btn-just-icon remove">
+                      <button onclick="onRemove(${ user.getDocket() })" class="btn btn-link btn-danger btn-just-icon remove">
                         <i class="material-icons">close</i>
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 </c:forEach>
@@ -75,3 +75,51 @@
 </layout:authorized>
 <script src="${ assetsPath }/js/plugins/jquery.dataTables.min.js"></script>
 <script src="${ assetsPath }/js/components/datatable.js"></script>
+<script>
+  onRemove = docket => {
+    Swal.fire({
+      title: '¿Está seguro de eliminar al profesor?',
+      text: "No podrá revertir la acción",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#52af50',
+      cancelButtonColor: '#ea4a64',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: '¡Si, elimínalo!'
+    }).then((result) => {
+      if (result.value) {
+        $.ajax({
+          url: 'teachers/remove?docket=' + docket,
+          type: 'DELETE',
+          data: {
+            docket: docket
+          },
+          success: function (data) {
+            if (! data) return handleError();
+            if (data.status === 200) return handleSuccess(docket);
+          }
+        });
+      }
+    });
+  };
+
+  handleSuccess = docket => {
+    $('#datatables').DataTable().rows('#user-' + docket).remove().draw();
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Eliminado!',
+      text: 'El profesor ha sido eliminado.',
+      confirmButtonColor: '#52af50',
+    })
+  };
+
+  handleError = () => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: '¡Algo ha salido mal!',
+      confirmButtonColor: '#52af50',
+    })
+  };
+</script>
