@@ -12,7 +12,9 @@
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title">Listado de cursos</h4>
-            <a href="courses/add">Añadir curso</a>
+            <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 1}">
+              <a href="courses/add">Añadir curso</a>
+            </c:if>
           </div>
           <div class="card-body">
             <div class="material-datatables">
