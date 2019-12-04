@@ -45,17 +45,20 @@ public class UserService extends Service {
     public static final void add(User user) {
         try {
             String query = Service.createInsert(table,
-                    "userTypeId, password, name, lastname, born_date, address, locationId, provinceId, email, phone_number",
-                    "%d, %s, %s, %s, %s, %s, %d, %d, %s, %s");
+                    "userTypeId, DNI, password, name, lastname, born_date, address, locationId, provinceId, email, phone_number",
+                    "%d, %d, %s, %s, %s, %s, %s, %d, %d, %s, %s");
 
-            query = String.format(query, user.getUserType().getId(), toDBMD5(user.getPassword()), toDBString(user.getName().trim()),
+            query = String.format(query, user.getUserType().getId(), user.getDNI(), toDBMD5(user.getPassword()), toDBString(user.getName().trim()),
                     toDBString(user.getLastname().trim()), toDBString(user.getBorndate(false).trim()), toDBString(user.getAddress().trim()),
                     user.getLocation().getId(), user.getProvince().getId(), toDBString(user.getEmail().trim()),
                     toDBString(user.getPhoneNumber()));
 
             user.setDocket(Service.execInsert(query, true));
         } catch (SQLIntegrityConstraintViolationException e) {
-            user.setErrorKey(1);
+            if (e.getMessage().contains("email"))
+                user.setErrorKey(1);
+            if (e.getMessage().contains("DNI"))
+                user.setErrorKey(2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,17 +67,21 @@ public class UserService extends Service {
     public static final void edit(User user) {
         try {
             String query = "UPDATE %s.%s SET " +
-                    "name = %s, lastname = %s, born_date = %s, address = %s, locationId = %d, provinceId = %d, email = %s, " +
-                    "phone_number = %s WHERE docket = %d AND userTypeId = %d";
+                    "DNI = %d, name = %s, lastname = %s, born_date = %s, address = %s, locationId = %d, provinceId = %d, " +
+                    "email = %s, phone_number = %s WHERE docket = %d AND userTypeId = %d";
 
-            query = String.format(query, database, table, toDBString(user.getName().trim()), toDBString(user.getLastname().trim()),
-                    toDBString(user.getBorndate(false).trim()), toDBString(user.getAddress().trim()),
-                    user.getLocation().getId(), user.getProvince().getId(), toDBString(user.getEmail().trim()),
-                    toDBString(user.getPhoneNumber().trim()), user.getDocket(), user.getUserType().getId());
+            query = String.format(query, database, table, user.getDNI(), toDBString(user.getName().trim()),
+                    toDBString(user.getLastname().trim()), toDBString(user.getBorndate(false).trim()),
+                    toDBString(user.getAddress().trim()), user.getLocation().getId(), user.getProvince().getId(),
+                    toDBString(user.getEmail().trim()), toDBString(user.getPhoneNumber().trim()), user.getDocket(),
+                    user.getUserType().getId());
 
             Service.execUpdate(query);
         } catch (SQLIntegrityConstraintViolationException e) {
-            user.setErrorKey(1);
+            if (e.getMessage().contains("email"))
+                user.setErrorKey(1);
+            if (e.getMessage().contains("DNI"))
+                user.setErrorKey(2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,10 +110,9 @@ public class UserService extends Service {
             ResultSet rs = execSelect(query);
             while (rs.next()) {
                 User user = new User();
-                getUser(rs.getInt("docket"), user, rs);
+                getUser(rs.getInt("docket"), userTypeId, user, rs);
                 user.setLocation(new Location(rs.getInt("locationId"), rs.getString("locationName")));
                 user.setProvince(new Province(rs.getInt("provinceId"), rs.getString("provinceName")));
-                user.setPhoneNumber(rs.getString("phone_number"));
                 users.add(user);
             }
         } catch (Exception e) {
@@ -124,11 +130,9 @@ public class UserService extends Service {
             query = String.format(query, database, table, userTypeId, docket);
             ResultSet rs = execSelect(query);
             rs.next();
-            getUser(docket, user, rs);
+            getUser(docket, userTypeId, user, rs);
             user.setLocation(new Location(rs.getInt("locationId")));
             user.setProvince(new Province(rs.getInt("provinceId")));
-            user.setPhoneNumber(rs.getString("phone_number"));
-            user.setUserType(new UserType(userTypeId));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,12 +140,15 @@ public class UserService extends Service {
         return user;
     }
 
-    private static void getUser(Integer docket, User user, ResultSet rs) throws SQLException {
+    private static void getUser(Integer docket, Integer userTypeId, User user, ResultSet rs) throws SQLException {
         user.setAddress(rs.getString("address"));
         user.setBorndate(rs.getString("born_date"));
         user.setDocket(docket);
         user.setEmail(rs.getString("email"));
         user.setName(rs.getString("name"));
         user.setLastname(rs.getString("lastname"));
+        user.setPhoneNumber(rs.getString("phone_number"));
+        user.setDNI(rs.getInt("DNI"));
+        user.setUserType(new UserType(userTypeId));
     }
 }

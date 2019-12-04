@@ -15,6 +15,14 @@
                         </div>
                         <div class="card-body ">
                             <div class="row">
+                                <label class="col-sm-2 col-form-label">DNI</label>
+                                <div class="col-sm-10">
+                                    <div class="form-group">
+                                        <input required type="number" name="DNI" class="form-control" placeholder="Ingrese DNI">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <label class="col-sm-2 col-form-label">Nombre</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">

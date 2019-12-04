@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User extends Model {
-	private int docket;
+	private Integer docket;
 	private UserType userType;
+	private Integer DNI;
 	private String password;
 	private String name;
 	private String lastname;
@@ -19,7 +20,7 @@ public class User extends Model {
 	private String status;
 	private Date registerDate;
 
-	public int getDocket() {
+	public Integer getDocket() {
 		return docket;
 	}
 	public void setDocket(Integer docket) {
@@ -126,5 +127,12 @@ public class User extends Model {
 	@Override
 	public String toString() {
 		return String.format("%s, %s", this.getLastname(), this.getName());
+	}
+
+	public Integer getDNI() {
+		return DNI;
+	}
+	public void setDNI(Integer DNI) {
+		this.DNI = DNI;
 	}
 }

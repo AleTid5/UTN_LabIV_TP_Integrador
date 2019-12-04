@@ -20,6 +20,7 @@
                 <thead>
                 <tr>
                   <th>Legajo</th>
+                  <th>DNI</th>
                   <th>Nombre y apellido</th>
                   <th>Fecha de nacimiento</th>
                   <th>Direccion</th>
@@ -33,6 +34,7 @@
                 <tfoot>
                 <tr>
                   <th>Legajo</th>
+                  <th>DNI</th>
                   <th>Nombre y apellido</th>
                   <th>Fecha de nacimiento</th>
                   <th>Direccion</th>
@@ -47,6 +49,7 @@
                 <c:forEach var="user" items="${ users }">
                   <tr id="user-${ user.getDocket() }">
                     <td>${ user.getDocket() }</td>
+                    <td>${ user.getDNI() }</td>
                     <td>${ user }</td>
                     <td>${ user.getBorndate(true) }</td>
                     <td>${ user.getAddress() }</td>

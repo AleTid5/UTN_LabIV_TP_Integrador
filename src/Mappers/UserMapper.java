@@ -11,6 +11,7 @@ public class UserMapper extends Mapper {
 
     public UserMapper(HttpServletRequest req, Object type) {
         this.user = (User) type;
+        user.setDNI(Integer.parseInt(getParameter(req, "DNI")));
         user.setName(getParameter(req, "name"));
         user.setLastname(getParameter(req, "lastname"));
         user.setBorndate(req.getParameter("borndate"));

@@ -7,6 +7,7 @@ public class Errors {
 	private static final HashMap<Integer, String> errorList = new HashMap<Integer, String>(){
         {
             put(1, "Ya existe un usuario con el E-Mail ingresado.");
+            put(2, "Ya existe un usuario con el DNI ingresado.");
         }
     };
 
