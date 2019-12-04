@@ -1,5 +1,7 @@
 package Controllers;
 
+import Services.CourseService;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -10,38 +12,25 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 @WebServlet("/courses/*")
 public class CourseController extends Controller {
-	private void processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		if (req.getRequestURL().indexOf("/add") != -1) {
-			req.getRequestDispatcher("/App/Views/Authorized/Courses/add.jsp").forward(req, res);
-			return;
-		} else if (req.getRequestURL().indexOf("/details") != -1) {
-			req.getRequestDispatcher("/App/Views/Authorized/Courses/details.jsp").forward(req, res);
-			return;
-		} else if (req.getRequestURL().indexOf("/uploadNotes") != -1) {
-			req.getRequestDispatcher("/App/Views/Authorized/Courses/uploadNotes.jsp").forward(req, res);
-			return;
-		}
+	private static final String path = "Courses";
 
-		Boolean isAdmin = false;
+	private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String action = getCleanPath(req, path.toLowerCase());
 
-		if (isAdmin)
-			req.getRequestDispatcher("/App/Views/Authorized/Courses/index.jsp").forward(req, res);
-		else
-			req.getRequestDispatcher("/App/Views/Authorized/Courses/index_teacher.jsp").forward(req, res);
+		if (action.equals("index")) req.setAttribute("courses",
+				CourseService.list((Integer) req.getSession().getAttribute("userDocket"),
+						(Integer) req.getSession().getAttribute("userTypeId")));
+
+		req.setAttribute("messages", messages);
+		req.getRequestDispatcher(getDispatch(path, action)).forward(req, resp);
 	}
 
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		try {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		handledCall(req, resp, () -> {
+			this.mustBeLogged((Integer) req.getSession().getAttribute("userTypeId"));
 			this.setContext(req, "Cursos");
-			this.processRequest(req, res);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+			this.processRequest(req, resp);
+			return null;
+		});
 	}
 }

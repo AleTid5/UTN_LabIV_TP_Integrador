@@ -7,4 +7,8 @@
         <error-code>404</error-code>
         <location>/error/not-found</location>
     </error-page>
+    <error-page>
+        <error-code>402</error-code>
+        <location>/error/unprocessable</location>
+    </error-page>
 </web-app>

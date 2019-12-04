@@ -1,15 +1,20 @@
 package Models;
 
 public class Subject extends Model {
-    private int id;
+    private Integer id;
     private Career career;
     private String name;
     private String status;
 
-	public int getId() {
+    public Subject(Integer id, String name) {
+    	this.setId(id);
+    	this.setName(name);
+	}
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

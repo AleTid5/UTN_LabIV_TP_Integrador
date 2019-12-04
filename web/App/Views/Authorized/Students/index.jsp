@@ -47,7 +47,7 @@
                 <c:forEach var="user" items="${ users }">
                   <tr id="user-${ user.getDocket() }">
                     <td>${ user.getDocket() }</td>
-                    <td>${ user.getName() }, ${ user.getLastname() }</td>
+                    <td>${ user }</td>
                     <td>${ user.getBorndate(true) }</td>
                     <td>${ user.getAddress() }</td>
                     <td>${ user.getLocation() }</td>

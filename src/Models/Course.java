@@ -1,16 +1,17 @@
 package Models;
 
 public class Course extends Model {
-	private int id;
+	private Integer id;
 	private Subject subject;
-	private int year;
+	private Integer year;
+	private Integer semester;
 	private Teacher teacher;
 	private String status;
-	
-	public int getId() {
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -21,10 +22,10 @@ public class Course extends Model {
 		this.subject = subject;
 	}
 	
-	public int getYear() {
+	public Integer getYear() {
 		return year;
 	}
-	public void setYear(int year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 	
@@ -40,5 +41,12 @@ public class Course extends Model {
 	}
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Integer getSemester() {
+		return semester;
+	}
+	public void setSemester(Integer semester) {
+		this.semester = semester;
 	}
 }

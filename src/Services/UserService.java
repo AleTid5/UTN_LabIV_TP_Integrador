@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import Exceptions.CredentialsException;
-import Exceptions.UnauthorizedException;
 import Models.Location;
 import Models.Province;
 import Models.User;
@@ -29,11 +28,12 @@ public class UserService extends Service {
 
     public static final void authenticate(HttpServletRequest req, String email) {
         try {
-            String query = "SELECT userTypeId, name, lastname FROM %s.%s WHERE email = %s";
+            String query = "SELECT docket, userTypeId, name, lastname FROM %s.%s WHERE email = %s";
             query = String.format(query, database, table, toDBString(email));
             ResultSet rs = execSelect(query);
             rs.next();
             req.getSession().setAttribute("email", email);
+            req.getSession().setAttribute("userDocket", rs.getInt("docket"));
             req.getSession().setAttribute("userTypeId", rs.getInt("userTypeId"));
             req.getSession().setAttribute("name", rs.getString("name"));
             req.getSession().setAttribute("lastname", rs.getString("lastname"));
@@ -95,7 +95,7 @@ public class UserService extends Service {
         ArrayList<User> users = new ArrayList<User>();
 
         try {
-            String query = "SELECT U.*, P.name AS province, L.name AS location FROM %s.%s AS U " +
+            String query = "SELECT U.*, P.name AS provinceName, L.name AS locationName FROM %s.%s AS U " +
                     "INNER JOIN %s.provinces AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.locations AS L on L.id = U.locationId " +
                     "WHERE U.status = 'A' AND userTypeId = %d";
@@ -103,14 +103,9 @@ public class UserService extends Service {
             ResultSet rs = execSelect(query);
             while (rs.next()) {
                 User user = new User();
-                user.setAddress(rs.getString("address"));
-                user.setBorndate(rs.getString("born_date"));
-                user.setDocket(rs.getInt("docket"));
-                user.setEmail(rs.getString("email"));
-                user.setName(rs.getString("name"));
-                user.setLastname(rs.getString("lastname"));
-                user.setLocation(new Location(rs.getInt("locationId"), rs.getString("location")));
-                user.setProvince(new Province(rs.getInt("provinceId"), rs.getString("province")));
+                getUser(rs.getInt("docket"), user, rs);
+                user.setLocation(new Location(rs.getInt("locationId"), rs.getString("locationName")));
+                user.setProvince(new Province(rs.getInt("provinceId"), rs.getString("provinceName")));
                 user.setPhoneNumber(rs.getString("phone_number"));
                 users.add(user);
             }
@@ -129,12 +124,7 @@ public class UserService extends Service {
             query = String.format(query, database, table, userTypeId, docket);
             ResultSet rs = execSelect(query);
             rs.next();
-            user.setAddress(rs.getString("address"));
-            user.setBorndate(rs.getString("born_date"));
-            user.setDocket(docket);
-            user.setEmail(rs.getString("email"));
-            user.setName(rs.getString("name"));
-            user.setLastname(rs.getString("lastname"));
+            getUser(docket, user, rs);
             user.setLocation(new Location(rs.getInt("locationId")));
             user.setProvince(new Province(rs.getInt("provinceId")));
             user.setPhoneNumber(rs.getString("phone_number"));
@@ -144,5 +134,14 @@ public class UserService extends Service {
         }
 
         return user;
+    }
+
+    private static void getUser(Integer docket, User user, ResultSet rs) throws SQLException {
+        user.setAddress(rs.getString("address"));
+        user.setBorndate(rs.getString("born_date"));
+        user.setDocket(docket);
+        user.setEmail(rs.getString("email"));
+        user.setName(rs.getString("name"));
+        user.setLastname(rs.getString("lastname"));
     }
 }

@@ -47,6 +47,10 @@ public abstract class Controller extends HttpServlet implements iController {
 	protected final void mustBeAdministrator(Integer userTypeId) throws UnauthorizedException {
 		if (! userTypeId.equals(1)) throw new UnauthorizedException();
 	}
+
+	protected final void mustBeLogged(Integer userTypeId) throws UnauthorizedException {
+		if (userTypeId == null) throw new UnauthorizedException();
+	}
 	
 	protected final Boolean compare(String v1, String v2) {
 		Boolean comparison = null;

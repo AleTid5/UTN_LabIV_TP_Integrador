@@ -122,4 +122,9 @@ public class User extends Model {
 	public Date getRegisterDate() {
 		return registerDate;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s, %s", this.getLastname(), this.getName());
+	}
 }
