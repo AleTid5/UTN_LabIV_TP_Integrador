@@ -1,8 +1,8 @@
 package Models;
 
 public class StudentCourse extends Model {
-    private Course course;
-    private Student student;
+    private Course course = new Course();
+    private Student student = new Student();
     private String status;
     private int gradeP1;
     private int gradeR1;

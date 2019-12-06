@@ -56,7 +56,7 @@
                     </c:if>
                     <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 2}">
                       <td>
-                        <a href="details?course-id=${ course.getId() }" class="btn btn-link btn-warning btn-just-icon edit">
+                        <a href="courses/details?course-id=${ course.getId() }" class="btn btn-link btn-warning btn-just-icon edit">
                           <i class="material-icons">dvr</i>
                         </a>
                       </td>

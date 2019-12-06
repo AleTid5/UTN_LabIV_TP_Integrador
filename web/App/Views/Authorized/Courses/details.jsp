@@ -15,7 +15,7 @@
                                 </h4>
                             </div>
                             <div class="col-sm-1">
-                                <a href="courses/uploadNotes?course-id=${ courseId }" class="btn btn-warning btn-round btn-fab">
+                                <a href="uploadNotes?course-id=${ courseId }" class="btn btn-warning btn-round btn-fab">
                                     <i class="material-icons">dvr</i>
                                 </a>
                             </div>

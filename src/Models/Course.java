@@ -11,6 +11,12 @@ public class Course extends Model {
 	private ArrayList<Student> students = new ArrayList<>();
 	private String status;
 
+	public Course() {}
+
+	public Course(Integer id) {
+		this.setId(id);
+	}
+
 	public Integer getId() {
 		return id;
 	}

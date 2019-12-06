@@ -2,7 +2,9 @@ package Controllers;
 
 import Exceptions.UnauthorizedException;
 import Mappers.CourseMapper;
+import Mappers.StudentCourseMapper;
 import Models.Course;
+import Models.StudentCourse;
 import Services.CourseService;
 import Services.StudentPerCourseService;
 import Services.SubjectService;
@@ -11,6 +13,7 @@ import Utils.Errors;
 import Utils.Message;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,6 +51,12 @@ public class CourseController extends Controller {
 			req.setAttribute("courseId", courseId);
 		}
 
+		if (action.equals("uploadNotes")) {
+			this.mustBeTeacher(req);
+			req.setAttribute("studentsPerCourse", StudentPerCourseService.list(Integer.parseInt(courseId)));
+			req.setAttribute("courseId", courseId);
+		}
+
 		req.setAttribute("messages", messages);
 		req.getRequestDispatcher(getDispatch(path, action)).forward(req, resp);
 	}
@@ -63,6 +72,11 @@ public class CourseController extends Controller {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if (this.compare(req.getParameter("method"), "PUT")) {
+			doPut(req, resp);
+			return;
+		}
+
 		handledCall(req, resp, () -> {
 			this.mustBeAdministrator(req);
 			Course course = new CourseMapper(req).getCourse();
@@ -70,6 +84,20 @@ public class CourseController extends Controller {
 			StudentPerCourseService.add(course);
 			String uri = "add?" + (course.getErrorKey() != null ? "errorId=" + course.getErrorKey() :
 					"course-id=" + course.getId());
+			redirect(req, resp, path.toLowerCase() + "/" + uri);
+
+			return null;
+		});
+	}
+
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		handledCall(req, resp, () -> {
+			this.mustBeTeacher(req);
+			ArrayList<StudentCourse> studentsCourse = new StudentCourseMapper(req).getStudentsCourse();
+			for (StudentCourse studentCourse : studentsCourse)
+				StudentPerCourseService.edit(studentCourse);
+			String uri = "uploadNotes?course-id=" + req.getParameter("courseId");
 			redirect(req, resp, path.toLowerCase() + "/" + uri);
 
 			return null;
