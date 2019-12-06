@@ -79,7 +79,7 @@
     const isValid = ! isNaN(from) && ! isNaN(to) && to >= from;
 
     if (! isValid)
-      $('#error-submit').html("Las fechas ingresadas son inválidas").show();
+      $('#error-submit').html("Las fecha Desde no puede mayor que la de Hasta.").show();
 
     return isValid;
   }
