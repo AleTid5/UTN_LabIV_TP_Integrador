@@ -27,6 +27,9 @@
                   <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") != 2}">
                     <th>Docente</th>
                   </c:if>
+                  <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 2}">
+                    <th class="disabled-sorting text-right"></th>
+                  </c:if>
                 </tr>
                 </thead>
                 <tfoot>
@@ -36,6 +39,9 @@
                   <th>Año</th>
                   <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") != 2}">
                     <th>Docente</th>
+                  </c:if>
+                  <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 2}">
+                    <th class="text-right"></th>
                   </c:if>
                 </tr>
                 </tfoot>
@@ -47,6 +53,13 @@
                     <td>${ course.getYear() }</td>
                     <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") != 2}">
                       <td>${ course.getTeacher() }</td>
+                    </c:if>
+                    <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 2}">
+                      <td>
+                        <a href="details?course-id=${ course.getId() }" class="btn btn-link btn-warning btn-just-icon edit">
+                          <i class="material-icons">dvr</i>
+                        </a>
+                      </td>
                     </c:if>
                   </tr>
                 </c:forEach>

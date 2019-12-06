@@ -30,7 +30,8 @@ public class LoginController extends Controller {
 			String password = req.getParameter("password");
 			UserService.login(email, password);
 			UserService.authenticate(req, email);
-			redirect(req, resp, "dashboard");
+			String location = (Integer) req.getSession().getAttribute("userTypeId") == 1 ? "dashboard" : "courses";
+			redirect(req, resp, location);
 		} catch (Exception e) {
 			redirect(req, resp, "login");
 			e.printStackTrace();

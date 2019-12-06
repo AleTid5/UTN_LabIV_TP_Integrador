@@ -141,7 +141,7 @@ public class UserService extends Service {
         return user;
     }
 
-    private static void getUser(Integer docket, Integer userTypeId, User user, ResultSet rs) throws SQLException {
+    public static void getUser(Integer docket, Integer userTypeId, User user, ResultSet rs) throws SQLException {
         user.setAddress(rs.getString("address"));
         user.setBorndate(rs.getString("born_date"));
         user.setDocket(docket);

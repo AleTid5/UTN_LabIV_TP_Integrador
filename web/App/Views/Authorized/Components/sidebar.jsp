@@ -23,12 +23,12 @@
 			</div>
 		</div>
 		<ul class="nav">
-			<li class="nav-item ${ currentLink.equals("/dashboard") ? "active" : ""}">
-				<a class="nav-link" href="${ mainPath }/dashboard"> <i class="material-icons">dashboard</i>
-					<p>Dashboard</p>
-				</a>
-			</li>
 			<c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 1}">
+				<li class="nav-item ${ currentLink.equals("/dashboard") ? "active" : ""}">
+					<a class="nav-link" href="${ mainPath }/dashboard"> <i class="material-icons">dashboard</i>
+						<p>Dashboard</p>
+					</a>
+				</li>
 				<li class="nav-item ${ currentLink.contains("/students") ? "active" : ""}">
 					<a class="nav-link" data-toggle="collapse" href="#students"> <i class="material-icons">accessibility_new</i>
 						<p>
@@ -92,7 +92,7 @@
 				</li>
 			</c:if>
 			<c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") == 2}">
-				<li class="nav-item ${ currentLink.equals("/courses") ? "active" : ""}">
+				<li class="nav-item ${ currentLink.contains("/courses") ? "active" : ""}">
 					<a class="nav-link" href="${ mainPath }/courses"> <i class="material-icons">school</i>
 						<p>Ver Cursos</p>
 					</a>

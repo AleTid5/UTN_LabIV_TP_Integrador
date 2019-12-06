@@ -50,7 +50,7 @@ abstract public class UserController extends Controller {
 
     public final void get(HttpServletRequest req, HttpServletResponse resp) {
         handledCall(req, resp, () -> {
-            this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
+            this.mustBeAdministrator(req);
             this.setContext(req, navbarTitle);
             this.processRequest(req, resp);
             return null;
@@ -59,7 +59,7 @@ abstract public class UserController extends Controller {
 
     public final void post(HttpServletRequest req, HttpServletResponse resp) {
         handledCall(req, resp, () -> {
-            this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
+            this.mustBeAdministrator(req);
             User user = new UserMapper(req, this.user).getUser();
             UserService.add(user);
             String uri = "add?" + (user.getErrorKey() != null ? "errorId=" + user.getErrorKey() :
@@ -72,7 +72,7 @@ abstract public class UserController extends Controller {
 
     public final void put(HttpServletRequest req, HttpServletResponse resp) {
         handledCall(req, resp, () -> {
-            this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
+            this.mustBeAdministrator(req);
             User user = new UserMapper(req, this.user).getUser();
             user.setDocket(Integer.parseInt(req.getParameter("docket")));
             UserService.edit(user);
@@ -86,7 +86,7 @@ abstract public class UserController extends Controller {
 
     public final void delete(HttpServletRequest req, HttpServletResponse resp) {
         handledCall(req, resp, () -> {
-            this.mustBeAdministrator((Integer) req.getSession().getAttribute("userTypeId"));
+            this.mustBeAdministrator(req);
             UserService.remove(Integer.parseInt(req.getParameter("docket")), this.user.getUserType().getId());
 
             return null;

@@ -1,5 +1,7 @@
 package Controllers;
 
+import Exceptions.UnauthorizedException;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -14,11 +16,12 @@ public class DashboardController extends Controller {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+			this.mustBeAdministrator(req);
 			String action = getCleanPath(req, path.toLowerCase());
 			this.setContext(req, "Dashboard");
 
 			req.getRequestDispatcher(getDispatch(path, action)).forward(req, resp);
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | UnauthorizedException e) {
 			redirect(req, resp, "login");
 		} catch (Exception e) {
 			e.printStackTrace();

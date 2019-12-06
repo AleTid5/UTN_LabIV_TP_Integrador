@@ -44,12 +44,12 @@ public abstract class Controller extends HttpServlet implements iController {
 		return (isAuthorized ? authorizedPath : unauthorizedPath) + path + "/" + action + ".jsp";
 	}
 
-	protected final void mustBeAdministrator(Integer userTypeId) throws UnauthorizedException {
-		if (! userTypeId.equals(1)) throw new UnauthorizedException();
+	protected final void mustBeAdministrator(HttpServletRequest req) throws UnauthorizedException {
+		if (! req.getSession().getAttribute("userTypeId").equals(1)) throw new UnauthorizedException();
 	}
 
-	protected final void mustBeTeacher(Integer userTypeId) throws UnauthorizedException {
-		if (! userTypeId.equals(2)) throw new UnauthorizedException();
+	protected final void mustBeTeacher(HttpServletRequest req) throws UnauthorizedException {
+		if (! req.getSession().getAttribute("userTypeId").equals(2)) throw new UnauthorizedException();
 	}
 
 	protected final void mustBeLogged(Integer userTypeId) throws UnauthorizedException {
