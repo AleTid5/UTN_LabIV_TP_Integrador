@@ -57,7 +57,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-10">
                                                         <div class="form-group">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                    min="0"
                                                                    max="10"
                                                                    class="form-control"
@@ -72,7 +72,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-10">
                                                         <div class="form-group">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                    min="0"
                                                                    max="10"
                                                                    class="form-control"
@@ -87,7 +87,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-10">
                                                         <div class="form-group">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                    min="0"
                                                                    max="10"
                                                                    class="form-control"
@@ -102,7 +102,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-10">
                                                         <div class="form-group">
-                                                            <input type="text"
+                                                            <input type="number"
                                                                    min="0"
                                                                    max="10"
                                                                    class="form-control"
