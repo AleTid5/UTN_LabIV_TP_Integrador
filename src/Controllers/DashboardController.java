@@ -1,6 +1,7 @@
 package Controllers;
 
 import Exceptions.UnauthorizedException;
+import Services.DashboardService;
 
 import java.io.IOException;
 
@@ -19,6 +20,9 @@ public class DashboardController extends Controller {
 			this.mustBeAdministrator(req);
 			String action = getCleanPath(req, path.toLowerCase());
 			this.setContext(req, "Dashboard");
+			req.setAttribute("bestAverage", DashboardService.getBestAverage());
+			req.setAttribute("coursesCount", DashboardService.getCoursesCount());
+			req.setAttribute("studentsCount", DashboardService.getUsersCount());
 
 			req.getRequestDispatcher(getDispatch(path, action)).forward(req, resp);
 		} catch (NullPointerException | UnauthorizedException e) {
