@@ -47,13 +47,13 @@ public class CourseController extends Controller {
 
 		if (action.equals("details")) {
 			this.mustBeTeacher(req);
-			req.setAttribute("students", StudentPerCourseService.list(3, Integer.parseInt(courseId)));
+			req.setAttribute("students", StudentPerCourseService.list(3, Integer.parseInt(courseId), (Integer) req.getSession().getAttribute("userDocket")));
 			req.setAttribute("courseId", courseId);
 		}
 
 		if (action.equals("uploadNotes")) {
 			this.mustBeTeacher(req);
-			req.setAttribute("studentsPerCourse", StudentPerCourseService.list(Integer.parseInt(courseId)));
+			req.setAttribute("studentsPerCourse", StudentPerCourseService.list(Integer.parseInt(courseId), (Integer) req.getSession().getAttribute("userDocket")));
 			req.setAttribute("courseId", courseId);
 		}
 

@@ -45,17 +45,18 @@ public class StudentPerCourseService extends Service {
         }
     }
 
-    public static final ArrayList<User> list(Integer userTypeId, Integer courseId) {
+    public static final ArrayList<User> list(Integer userTypeId, Integer courseId, Integer teacherDocket) {
         ArrayList<User> users = new ArrayList<>();
 
         try {
             String query = "SELECT U.*, P.name AS provinceName, L.name AS locationName " +
                     "FROM %s.%s AS SC " +
-                    "INNER JOIN %s.users U on SC.studentDocket = U.docket " +
+                    "INNER JOIN %s.courses C on SC.courseId = C.id " +
+                    "INNER JOIN %s.course AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.provinces AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.locations AS L on L.id = U.locationId " +
-                    "WHERE U.status = 'A' AND SC.courseId = %d";
-            query = String.format(query, database, table, database, database, database, courseId);
+                    "WHERE U.status = 'A' AND SC.courseId = %d AND C.teacherDocket = %d";
+            query = String.format(query, database, table, database, database, database, database, courseId, teacherDocket);
 
             ResultSet rs = execSelect(query);
             while (rs.next()) {
@@ -72,16 +73,17 @@ public class StudentPerCourseService extends Service {
         return users;
     }
 
-    public static final ArrayList<StudentCourse> list(Integer courseId) {
+    public static final ArrayList<StudentCourse> list(Integer courseId, Integer teacherDocket) {
         ArrayList<StudentCourse> students = new ArrayList<>();
 
         try {
             String query = "SELECT U.*, P.name AS provinceName, L.name AS locationName, SC.* " +
                     "FROM %s.%s AS SC " +
+                    "INNER JOIN %s.courses C on SC.courseId = C.id " +
                     "INNER JOIN %s.users U on SC.studentDocket = U.docket " +
                     "INNER JOIN %s.provinces AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.locations AS L on L.id = U.locationId " +
-                    "WHERE U.status = 'A' AND SC.courseId = %d";
+                    "WHERE U.status = 'A' AND SC.courseId = %d AND C.teacherDocket = %d";
             query = String.format(query, database, table, database, database, database, courseId);
 
             ResultSet rs = execSelect(query);

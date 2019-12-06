@@ -1,8 +1,11 @@
 package Controllers;
 
 import Services.UserService;
+import Utils.Errors;
+import Utils.Message;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,8 +18,12 @@ public class LoginController extends Controller {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+			this.messages = new ArrayList<>();
+			String error = Errors.getError(req.getParameter("errorId"));
+			if (error != null) messages.add(new Message(true, error));
 			this.revokeSession(req);
 			this.setContext(req, "");
+			req.setAttribute("messages", messages);
 			req.getRequestDispatcher("/App/Views/Unauthorized/Login/index.jsp").forward(req, resp);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +40,7 @@ public class LoginController extends Controller {
 			String location = (Integer) req.getSession().getAttribute("userTypeId") == 1 ? "dashboard" : "courses";
 			redirect(req, resp, location);
 		} catch (Exception e) {
-			redirect(req, resp, "login");
+			redirect(req, resp, "login?errorId=0");
 			e.printStackTrace();
 		}
 	}
