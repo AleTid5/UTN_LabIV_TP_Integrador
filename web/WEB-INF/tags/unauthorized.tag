@@ -29,7 +29,6 @@
 <div id="app" class="wrapper wrapper-full-page">
 	<div class="page-header login-page header-filter" filter-color="black"
 		 style="background-image: url('${ assetsPath }/img/login.jpg'); background-size: cover; background-position: top center;">
-		<!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
 		<div class="container">
 			<c:forEach var="message" items="${ messages }">
 				<div class="alert alert-${ message.getClassName() }">

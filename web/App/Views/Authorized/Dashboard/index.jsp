@@ -3,7 +3,7 @@
 
 <layout:authorized>
   <jsp:body>
-    <form action="" method="POST">
+    <form action="" method="POST" onsubmit="return handleSubmit()">
       <div class="row">
         <div class="col-2">
           <input required type="text" name="from-date" class="form-control datepicker" placeholder="Ingrese fecha desde">
@@ -14,6 +14,7 @@
         <div class="col-2">
           <button type="submit" class="btn btn-fill btn-rose">Buscar</button>
         </div>
+        <div class="col-2 text-danger" style="display: none;" id="error-submit"></div>
       </div>
     </form>
     <div class="row">
@@ -71,4 +72,14 @@
 <script src="${ assetsPath }/js/plugins/chartist.min.js"></script>
 <script>
   md.initFormExtendedDatetimepickers();
+
+  handleSubmit = () => {
+    const from = Date.parse($('[name="from-date"]').val());
+    const to = Date.parse($('[name="to-date"]').val());
+    const isValid = ! isNaN(from) && ! isNaN(to) && to >= from;
+
+    if (! isValid) $('#error-submit').html("Las fechas ingresadas son inválidas").show();
+
+    return isValid;
+  }
 </script>

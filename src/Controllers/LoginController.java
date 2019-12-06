@@ -18,11 +18,12 @@ public class LoginController extends Controller {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-			this.messages = new ArrayList<>();
-			String error = Errors.getError(req.getParameter("errorId"));
-			if (error != null) messages.add(new Message(true, error));
 			this.revokeSession(req);
 			this.setContext(req, "");
+
+			String error = Errors.getError(req.getParameter("errorId"));
+			if (error != null) messages.add(new Message(true, error));
+
 			req.setAttribute("messages", messages);
 			req.getRequestDispatcher("/App/Views/Unauthorized/Login/index.jsp").forward(req, resp);
 		} catch (Exception e) {
