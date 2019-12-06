@@ -51,8 +51,8 @@ public class StudentPerCourseService extends Service {
         try {
             String query = "SELECT U.*, P.name AS provinceName, L.name AS locationName " +
                     "FROM %s.%s AS SC " +
+                    "INNER JOIN %s.users U on SC.studentDocket = U.docket " +
                     "INNER JOIN %s.courses C on SC.courseId = C.id " +
-                    "INNER JOIN %s.course AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.provinces AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.locations AS L on L.id = U.locationId " +
                     "WHERE U.status = 'A' AND SC.courseId = %d AND C.teacherDocket = %d";
@@ -84,7 +84,7 @@ public class StudentPerCourseService extends Service {
                     "INNER JOIN %s.provinces AS P on P.id = U.provinceId " +
                     "INNER JOIN %s.locations AS L on L.id = U.locationId " +
                     "WHERE U.status = 'A' AND SC.courseId = %d AND C.teacherDocket = %d";
-            query = String.format(query, database, table, database, database, database, courseId);
+            query = String.format(query, database, table, database, database, database, database, courseId, teacherDocket);
 
             ResultSet rs = execSelect(query);
             while (rs.next()) {

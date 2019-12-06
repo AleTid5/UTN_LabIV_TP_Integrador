@@ -78,7 +78,8 @@
     const to = Date.parse($('[name="to-date"]').val());
     const isValid = ! isNaN(from) && ! isNaN(to) && to >= from;
 
-    if (! isValid) $('#error-submit').html("Las fechas ingresadas son inválidas").show();
+    if (! isValid)
+      $('#error-submit').html("Las fechas ingresadas son inválidas").show();
 
     return isValid;
   }
