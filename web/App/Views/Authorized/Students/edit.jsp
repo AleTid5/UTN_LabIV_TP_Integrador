@@ -107,7 +107,7 @@
                                 <label class="col-sm-2 col-form-label">Teléfono</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <input type="text" required name="phoneNumber" class="form-control" placeholder="Ingrese el teléfono" value="${ user.getPhoneNumber() }">
+                                        <input type="number" required name="phoneNumber" class="form-control" placeholder="Ingrese el teléfono" value="${ user.getPhoneNumber() }">
                                     </div>
                                 </div>
                             </div>

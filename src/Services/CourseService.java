@@ -36,7 +36,8 @@ public class CourseService extends Service {
                     "FROM %s.%s C " +
                     "INNER JOIN %s.subjects S ON C.subjectId = S.id " +
                     "INNER JOIN %s.users U ON C.teacherDocket = U.docket " +
-                    "WHERE C.status = 'A' AND U.userTypeId = 2" + isTeacher;
+                    "WHERE C.status = 'A' AND U.userTypeId = 2" + isTeacher + " " +
+                    "ORDER BY C.year, C.semester, C.subjectId";
             query = String.format(query, database, table, database, database);
             ResultSet rs = execSelect(query);
             while (rs.next()) {

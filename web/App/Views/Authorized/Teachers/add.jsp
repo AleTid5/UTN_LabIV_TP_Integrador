@@ -96,7 +96,7 @@
                                 <label class="col-sm-2 col-form-label">Teléfono</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <input required type="text" name="phoneNumber" class="form-control" placeholder="Ingrese el teléfono">
+                                        <input required type="number" name="phoneNumber" class="form-control" placeholder="Ingrese el teléfono">
                                     </div>
                                 </div>
                             </div>

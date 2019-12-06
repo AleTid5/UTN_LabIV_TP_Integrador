@@ -27,7 +27,7 @@
                                 <label class="col-sm-2 col-form-label">Legajo</label>
                                 <div class="col-sm-10">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="docket" placeholder="Legajo" value="${ user.getDocket() }" disabled>
+                                        <input type="number" class="form-control" name="docket" placeholder="Legajo" value="${ user.getDocket() }" disabled>
                                     </div>
                                 </div>
                             </div>
