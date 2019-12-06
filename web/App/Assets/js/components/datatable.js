@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('#datatables').DataTable({
+    const config = {
         pagingType: "full_numbers",
         lengthMenu: [
             [10, 25, 50, -1],
@@ -12,5 +12,9 @@ $(document).ready(function() {
             emptyTable: "No se han encontrado resultados",
             zeroRecords: "No se han encontrado resultados"
         }
-    });
+    };
+
+    $('#datatables').DataTable(config);
+    $('#teachers-datatable').DataTable(config);
+    $('#students-datatable').DataTable(config);
 });

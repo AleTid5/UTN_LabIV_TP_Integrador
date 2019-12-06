@@ -54,7 +54,7 @@
     width: 260px;
 }
 .alert {
-    position: fixed;
+    position: fixed!important;
     top: 60px;
     right: 30px;
     z-index: 1;

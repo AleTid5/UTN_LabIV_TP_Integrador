@@ -42,12 +42,12 @@ public abstract class Service {
         st.executeUpdate(query);
     }
 
-    protected static final Integer execInsert(String query, Boolean x) throws SQLException {
+    protected static final Integer execInsert(String query, Integer columnIndex) throws SQLException {
         Statement st = connection.createStatement();
         st.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
         ResultSet rs = st.getGeneratedKeys();
         rs.next();
-        return rs.getInt(1);
+        return rs.getInt(columnIndex);
     }
 
     protected static final ResultSet execSelect(String query) throws SQLException {

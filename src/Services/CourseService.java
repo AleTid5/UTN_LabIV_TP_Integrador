@@ -5,16 +5,30 @@ import Models.Subject;
 import Models.Teacher;
 
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CourseService extends Service {
     private static final String table = "courses";
 
-    public static final void add() {
+    public static final void add(Course course) {
+        try {
+            String query = Service.createInsert(table,
+                    "subjectId, semester, teacherDocket",
+                    "%d, %d, %d");
+
+            query = String.format(query, course.getSubject().getId(), course.getSemester(), course.getTeacher().getDocket());
+
+            course.setId(Service.execInsert(query, 1));
+        } catch (SQLIntegrityConstraintViolationException e) {
+            course.setErrorKey(3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static final ArrayList<Course> list(Integer docket, Integer userTypeId) {
-        ArrayList<Course> courses = new ArrayList<Course>();
+        ArrayList<Course> courses = new ArrayList<>();
 
         try {
             String isTeacher = userTypeId == 2 ? (" AND C.teacherDocket = " + docket) : "";

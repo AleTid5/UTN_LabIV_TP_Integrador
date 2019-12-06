@@ -27,7 +27,6 @@
                   <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") != 2}">
                     <th>Docente</th>
                   </c:if>
-                  <th class="disabled-sorting text-right"></th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -38,7 +37,6 @@
                   <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") != 2}">
                     <th>Docente</th>
                   </c:if>
-                  <th class="text-right"></th>
                 </tr>
                 </tfoot>
                 <tbody>
@@ -50,11 +48,6 @@
                     <c:if test="${pageContext.getSession().getAttribute(\"userTypeId\") != 2}">
                       <td>${ course.getTeacher() }</td>
                     </c:if>
-                    <td>
-                      <a href="courses/details?courseId=${ course.getId() }" class="btn btn-link btn-warning btn-just-icon edit">
-                        <i class="material-icons">dvr</i>
-                      </a>
-                    </td>
                   </tr>
                 </c:forEach>
                 </tbody>

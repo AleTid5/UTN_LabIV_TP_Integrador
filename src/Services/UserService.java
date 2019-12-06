@@ -48,12 +48,13 @@ public class UserService extends Service {
                     "userTypeId, DNI, password, name, lastname, born_date, address, locationId, provinceId, email, phone_number",
                     "%d, %d, %s, %s, %s, %s, %s, %d, %d, %s, %s");
 
-            query = String.format(query, user.getUserType().getId(), user.getDNI(), toDBMD5(user.getPassword()), toDBString(user.getName().trim()),
-                    toDBString(user.getLastname().trim()), toDBString(user.getBorndate(false).trim()), toDBString(user.getAddress().trim()),
+            query = String.format(query, user.getUserType().getId(), user.getDNI(), toDBMD5(Integer.toString(user.getDNI())),
+                    toDBString(user.getName().trim()), toDBString(user.getLastname().trim()),
+                    toDBString(user.getBorndate(false).trim()), toDBString(user.getAddress().trim()),
                     user.getLocation().getId(), user.getProvince().getId(), toDBString(user.getEmail().trim()),
                     toDBString(user.getPhoneNumber()));
 
-            user.setDocket(Service.execInsert(query, true));
+            user.setDocket(Service.execInsert(query, 1));
         } catch (SQLIntegrityConstraintViolationException e) {
             if (e.getMessage().contains("email"))
                 user.setErrorKey(1);
@@ -99,7 +100,7 @@ public class UserService extends Service {
     }
 
     public static final ArrayList<User> list(Integer userTypeId) {
-        ArrayList<User> users = new ArrayList<User>();
+        ArrayList<User> users = new ArrayList<>();
 
         try {
             String query = "SELECT U.*, P.name AS provinceName, L.name AS locationName FROM %s.%s AS U " +

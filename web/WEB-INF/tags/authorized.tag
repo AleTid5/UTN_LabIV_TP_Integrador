@@ -24,8 +24,8 @@
 	<meta name="description" content="Sistema de alumnos y profesores">
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-	<link href="${ assetsPath }/css/app.min.css" rel="stylesheet" />
 	<link href="${ assetsPath }/css/app.css" rel="stylesheet" />
+	<link href="${ assetsPath }/css/app.min.css" rel="stylesheet" />
 </head>
 <body>
 <div id="app" class="wrapper">

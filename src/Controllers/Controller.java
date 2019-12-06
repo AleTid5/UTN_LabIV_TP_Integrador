@@ -48,6 +48,10 @@ public abstract class Controller extends HttpServlet implements iController {
 		if (! userTypeId.equals(1)) throw new UnauthorizedException();
 	}
 
+	protected final void mustBeTeacher(Integer userTypeId) throws UnauthorizedException {
+		if (! userTypeId.equals(2)) throw new UnauthorizedException();
+	}
+
 	protected final void mustBeLogged(Integer userTypeId) throws UnauthorizedException {
 		if (userTypeId == null) throw new UnauthorizedException();
 	}
